@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blogger HTML クリーナー & タグ崩れ診断修復ツール</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col font-sans">
+
+  <!-- Header -->
+  <header class="bg-slate-800 border-b border-slate-700 p-4">
+    <div class="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-2">
+      <div class="flex items-center gap-3">
+        <i class="fa-solid fa-wand-magic-sparkles text-amber-400 text-2xl"></i>
+        <div>
+          <h1 class="text-xl font-bold text-white">Blogger HTML クリーナー & 表・タグ崩れ自動修復</h1>
+          <p class="text-xs text-slate-400">表示崩れ・文末テキスト切断・表の閉じ忘れを即座に検出＆全自動修復</p>
+        </div>
+      </div>
+      <span class="text-xs bg-emerald-950 text-emerald-300 px-3 py-1 rounded-full border border-emerald-700 font-semibold flex items-center gap-1">
+        <i class="fa-solid fa-shield-halved"></i> 文末切断保護ガード機能搭載
+      </span>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto w-full p-4 flex-1 flex flex-col lg:flex-row gap-6">
+
+    <!-- Left Column: Settings & Input -->
+    <div class="lg:w-1/2 flex flex-col gap-4">
+      
+      <!-- Option Settings -->
+      <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-lg">
+        <h2 class="text-sm font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-sliders text-sky-400"></i> クリーン・構造修復設定
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+          <label class="flex items-center gap-2 p-2 rounded bg-amber-950/40 hover:bg-amber-900/40 border border-amber-700/50 cursor-pointer transition">
+            <input type="checkbox" id="optFixTableStructure" checked class="w-4 h-4 text-amber-500 rounded focus:ring-amber-400 bg-slate-800 border-slate-600">
+            <span class="font-semibold text-amber-200">表(Table/TD/TR)構造の自動再構築</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 rounded bg-rose-950/30 hover:bg-rose-900/40 border border-rose-800/50 cursor-pointer transition">
+            <input type="checkbox" id="optEscapeLooseBrackets" checked class="w-4 h-4 text-rose-500 rounded focus:ring-rose-400 bg-slate-800 border-slate-600">
+            <span class="font-semibold text-rose-200">野良 <code>&lt;</code> 記号のエスケープ (文章消失防止)</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 rounded bg-emerald-950/30 hover:bg-emerald-900/40 border border-emerald-800/50 cursor-pointer transition">
+            <input type="checkbox" id="optProtectTrailingContent" checked class="w-4 h-4 text-emerald-500 rounded focus:ring-emerald-400 bg-slate-800 border-slate-600">
+            <span class="font-semibold text-emerald-200">文末テキストの切断・削除を保護</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 rounded bg-indigo-950/30 hover:bg-indigo-900/40 border border-indigo-800/50 cursor-pointer transition">
+            <input type="checkbox" id="optCleanAiComments" checked class="w-4 h-4 text-indigo-500 rounded focus:ring-indigo-400 bg-slate-800 border-slate-600">
+            <span class="font-semibold text-indigo-200">AI/翻訳ゴミタグ (<code>&lt;!--TgQPHd...--&gt;</code>) 除去</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 rounded bg-slate-900/60 hover:bg-slate-900 cursor-pointer transition">
+            <input type="checkbox" id="optDecodeEntities" checked class="w-4 h-4 text-amber-500 rounded focus:ring-amber-400 bg-slate-800 border-slate-600">
+            <span>文字コード/文字参照をUnicode化</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 rounded bg-slate-900/60 hover:bg-slate-900 cursor-pointer transition">
+            <input type="checkbox" id="optDecodeUrl" checked class="w-4 h-4 text-amber-500 rounded focus:ring-amber-400 bg-slate-800 border-slate-600">
+            <span>URLエンコード (<code>%XX</code>) を日本語化</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 rounded bg-slate-900/60 hover:bg-slate-900 cursor-pointer transition">
+            <input type="checkbox" id="optCleanStyles" checked class="w-4 h-4 text-amber-500 rounded focus:ring-amber-400 bg-slate-800 border-slate-600">
+            <span>無用な属性/無意味な <code>&lt;span&gt;</code> の解除</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 rounded bg-slate-900/60 hover:bg-slate-900 cursor-pointer transition">
+            <input type="checkbox" id="optCleanBloggerImages" checked class="w-4 h-4 text-amber-500 rounded focus:ring-amber-400 bg-slate-800 border-slate-600">
+            <span>Blogger画像周辺の不要な <code>&lt;br&gt;</code> カット</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 rounded bg-slate-900/60 hover:bg-slate-900 cursor-pointer transition">
+            <input type="checkbox" id="optCleanIndent" checked class="w-4 h-4 text-amber-500 rounded focus:ring-amber-400 bg-slate-800 border-slate-600">
+            <span>過剰な空行・重複インデントの整理</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 rounded bg-slate-900/60 hover:bg-slate-900 cursor-pointer transition">
+            <input type="checkbox" id="optRemoveComments" class="w-4 h-4 text-amber-500 rounded focus:ring-amber-400 bg-slate-800 border-slate-600">
+            <span>HTMLコメントを削除 (安全)</span>
+          </label>
+
+          <label class="flex items-center gap-2 p-2 rounded bg-slate-900/60 hover:bg-slate-900 cursor-pointer transition">
+            <input type="checkbox" id="optMinify" class="w-4 h-4 text-amber-500 rounded focus:ring-amber-400 bg-slate-800 border-slate-600">
+            <span>空白・改行の完全圧縮 (Minify)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Input Textarea -->
+      <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-lg flex-1 flex flex-col min-h-[300px]">
+        <div class="flex justify-between items-center mb-2">
+          <label for="inputHtml" class="text-sm font-medium text-slate-300 flex items-center gap-2">
+            <i class="fa-solid fa-code text-slate-400"></i> 元のHTMLコード
+          </label>
+          <span id="inputStats" class="text-xs text-slate-400">0 バイト</span>
+        </div>
+        <textarea id="inputHtml" placeholder="ここにBloggerのHTMLコードを貼り付けてください..." class="w-full flex-1 p-3 bg-slate-950 border border-slate-700 rounded-lg font-mono text-xs text-slate-200 focus:outline-none focus:border-amber-500 resize-none"></textarea>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex gap-3">
+        <button id="btnProcess" class="flex-1 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 px-6 rounded-xl transition flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
+          <i class="fa-solid fa-stethoscope"></i> 診断 & 構造修復・クリーン実行
+        </button>
+        <button id="btnClear" class="bg-slate-800 hover:bg-slate-700 text-slate-300 py-3 px-4 rounded-xl border border-slate-700 transition">
+          クリア
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Right Column: Diagnostics, Output & Stats -->
+    <div class="lg:w-1/2 flex flex-col gap-4">
+
+      <!-- Tag Diagnostic Report Box -->
+      <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-lg">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-sm font-semibold text-slate-200 flex items-center gap-2">
+            <i class="fa-solid fa-bug text-rose-400"></i> HTMLタグ構造・不整合診断（表示崩れ・切断の原因）
+          </h2>
+          <span id="diagBadge" class="text-xs px-2.5 py-0.5 rounded-full bg-slate-700 text-slate-300">未診断</span>
+        </div>
+
+        <div id="diagContainer" class="bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs text-slate-300 max-h-48 overflow-y-auto">
+          <p class="text-slate-500 italic">「診断 & 構造修復・クリーン実行」を押すと、div, span, table, td 等の開き/閉じタグの不整合がここに判定表示されます。</p>
+        </div>
+      </div>
+
+      <!-- Stats Summary -->
+      <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-lg grid grid-cols-3 gap-2 text-center">
+        <div class="bg-slate-900/80 p-3 rounded-lg">
+          <div class="text-xs text-slate-400">元のサイズ</div>
+          <div id="statOriginal" class="text-lg font-bold text-slate-200 mt-1">0 KB</div>
+        </div>
+        <div class="bg-slate-900/80 p-3 rounded-lg">
+          <div class="text-xs text-slate-400">最適化後</div>
+          <div id="statOptimized" class="text-lg font-bold text-emerald-400 mt-1">0 KB</div>
+        </div>
+        <div class="bg-slate-900/80 p-3 rounded-lg">
+          <div class="text-xs text-slate-400">削減率</div>
+          <div id="statSaved" class="text-lg font-bold text-amber-400 mt-1">0%</div>
+        </div>
+      </div>
+
+      <!-- Output Textarea -->
+      <div class="bg-slate-800 rounded-xl p-4 border border-slate-700 shadow-lg flex-1 flex flex-col min-h-[250px]">
+        <div class="flex justify-between items-center mb-2 flex-wrap gap-2">
+          <label for="outputHtml" class="text-sm font-medium text-slate-300 flex items-center gap-2">
+            <i class="fa-solid fa-check-circle text-emerald-400"></i> 最適化・構造修復済みHTMLコード
+          </label>
+          <div class="flex gap-2">
+            <button id="btnDownload" class="text-xs bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold px-3 py-1 rounded transition flex items-center gap-1 shadow">
+              <i class="fa-solid fa-download"></i> ファイル保存 (.html)
+            </button>
+            <button id="btnCopy" class="text-xs bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-1 rounded transition flex items-center gap-1">
+              <i class="fa-regular fa-copy"></i> コピー
+            </button>
+          </div>
+        </div>
+        <textarea id="outputHtml" readonly placeholder="処理結果がここに表示されます..." class="w-full flex-1 p-3 bg-slate-950 border border-slate-700 rounded-lg font-mono text-xs text-slate-200 focus:outline-none resize-none"></textarea>
+      </div>
+
+      <!-- Processing Log -->
+      <div id="logBox" class="bg-slate-800 rounded-xl p-4 border border-slate-700 text-xs text-slate-300">
+        <div class="font-semibold text-slate-200 mb-2 flex items-center gap-2">
+          <i class="fa-solid fa-list-check text-sky-400"></i> 処理詳細ログ
+        </div>
+        <ul id="logList" class="space-y-1 text-slate-400 max-h-24 overflow-y-auto pr-1">
+          <li>コードを入力して「診断 & 構造修復・クリーン実行」を押してください。</li>
+        </ul>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- JavaScript Logic -->
+  <script>
+    const inputHtml = document.getElementById('inputHtml');
+    const outputHtml = document.getElementById('outputHtml');
+    const inputStats = document.getElementById('inputStats');
+    
+    const btnProcess = document.getElementById('btnProcess');
+    const btnClear = document.getElementById('btnClear');
+    const btnCopy = document.getElementById('btnCopy');
+    const btnDownload = document.getElementById('btnDownload');
+
+    const optFixTableStructure = document.getElementById('optFixTableStructure');
+    const optEscapeLooseBrackets = document.getElementById('optEscapeLooseBrackets');
+    const optProtectTrailingContent = document.getElementById('optProtectTrailingContent');
+    const optCleanAiComments = document.getElementById('optCleanAiComments');
+    const optRemoveEmptyDivs = document.getElementById('optRemoveEmptyDivs');
+    const optDecodeEntities = document.getElementById('optDecodeEntities');
+    const optDecodeUrl = document.getElementById('optDecodeUrl');
+    const optCleanStyles = document.getElementById('optCleanStyles');
+    const optCleanBloggerImages = document.getElementById('optCleanBloggerImages');
+    const optCleanIndent = document.getElementById('optCleanIndent');
+    const optRemoveComments = document.getElementById('optRemoveComments');
+    const optMinify = document.getElementById('optMinify');
+
+    const statOriginal = document.getElementById('statOriginal');
+    const statOptimized = document.getElementById('statOptimized');
+    const statSaved = document.getElementById('statSaved');
+    const logList = document.getElementById('logList');
+    const diagBadge = document.getElementById('diagBadge');
+    const diagContainer = document.getElementById('diagContainer');
+
+    // Track input size
+    inputHtml.addEventListener('input', () => {
+      const bytes = new Blob([inputHtml.value]).size;
+      inputStats.textContent = formatBytes(bytes);
+    });
+
+    btnProcess.addEventListener('click', () => {
+      let code = inputHtml.value;
+      if (!code.trim()) {
+        showStatusMessage('HTMLコードを入力してください。');
+        return;
+      }
+
+      // UI Non-blocking loading state (Prevents browser freeze on 1.8MB+ inputs)
+      btnProcess.disabled = true;
+      btnProcess.classList.add('opacity-75', 'cursor-not-allowed');
+      const origBtnContent = btnProcess.innerHTML;
+      btnProcess.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> 大容量HTMLを高速解析・修復中...';
+
+      setTimeout(() => {
+        try {
+          const origSize = new Blob([code]).size;
+          const origCharLen = code.length;
+          const logs = [];
+
+          // 1. Tag Structural Diagnostics Check BEFORE cleaning (High Performance Single-Pass)
+          const diagResults = analyzeTagStructure(code);
+          renderDiagnostics(diagResults);
+
+          // 1.1 Remove AI/Translation noise tags & fix broken comment closers (-- >)
+          if (optCleanAiComments && optCleanAiComments.checked) {
+            const aiCleanRes = cleanAiNoiseComments(code);
+            code = aiCleanRes.html;
+            if (aiCleanRes.count > 0) {
+              logs.push(`🧹 AI・自動翻訳の制御用ゴミタグ (<!--TgQPHd...-->) を ${aiCleanRes.count} 箇所完全に除去しました。`);
+            }
+            if (aiCleanRes.fixedBrokenClosers > 0) {
+              logs.push(`🛠️ スペースで破損していたコメント閉じ記号 (-- >) ${aiCleanRes.fixedBrokenClosers} 箇所を正常修復し、タグ呑み込み・表示崩れを解消しました。`);
+            }
+          }
+
+          // 1.2 Escape Loose Angle Brackets (<2026 etc.) to prevent browser swallowing text paragraphs
+          if (optEscapeLooseBrackets && optEscapeLooseBrackets.checked) {
+            const looseRes = escapeLooseAngleBrackets(code);
+            code = looseRes.html;
+            if (looseRes.count > 0) {
+              logs.push(`🛡️ タグではない単独の「<」記号 (${looseRes.count}箇所) を &amp;lt; に安全エスケープし、文章消失を防止しました。`);
+            }
+          }
+
+          // 1.5 Safe Trailing Content Guard - Prevent unclosed <!-- or <script> swallowing trailing text
+          if (optProtectTrailingContent.checked) {
+            const guardRes = sanitizeTrailingUnclosedTags(code);
+            code = guardRes.html;
+            if (guardRes.fixedComments > 0) {
+              logs.push(`🛡️ 文末の閉じられていないHTMLコメント (<!--) を安全に補完し、文末のテキスト消失を予防しました。`);
+            }
+          }
+
+          // 2. Decode HTML Entities
+          if (optDecodeEntities.checked) {
+            const countBefore = (code.match(/&#?\w+;/g) || []).length;
+            code = decodeHTMLEntities(code);
+            if (countBefore > 0) {
+              logs.push(`✅ 約 ${countBefore} 個のHTML文字参照/コードをUnicode化しました。`);
+            }
+          }
+
+          // 3. Decode URL Percent Encoding (%XX) across linebreaks
+          if (optDecodeUrl.checked) {
+            const percentMatches = code.match(/(?:%[0-9a-fA-F]{2}(?:[\s\r\n]|<br\s*\/?>)*)+/gi) || [];
+            if (percentMatches.length > 0) {
+              code = decodePercentEncoding(code);
+              logs.push(`✅ ${percentMatches.length} 箇所のURLエンコード(%XX)を日本語化しました。`);
+            }
+          }
+
+          // 4. Advanced DOM Structure & Table Auto-repair
+          if (optFixTableStructure.checked) {
+            const repairedRes = autoRepairTableStructure(code);
+            code = repairedRes.html;
+            if (repairedRes.fixedCount > 0) {
+              logs.push(`🛠️ 表(Table/TD/TR)および親タグの未閉じ構造 ${repairedRes.fixedCount} 箇所を完全に補完・構造修復しました。`);
+            }
+          }
+
+          // 5. Safe DOM Parser Clean (Optimized $O(N)$ single bottom-up pass)
+          const domResult = cleanHTMLWithDOMParser(code, {
+            removeEmptyDivs: optRemoveEmptyDivs ? optRemoveEmptyDivs.checked : true,
+            cleanStyles: optCleanStyles.checked,
+            cleanBloggerImages: optCleanBloggerImages.checked
+          });
+          code = domResult.html;
+          if (domResult.count > 0) {
+            logs.push(`✅ DOM構造解析により ${domResult.count} 箇所の不要なタグ/無効属性を安全に整理しました。`);
+          }
+
+          // 6. Clean whitespace & Excessive empty lines
+          if (optCleanIndent.checked && !optMinify.checked) {
+            const indentRes = cleanIndentation(code);
+            code = indentRes.html;
+            if (indentRes.count > 0) {
+              logs.push(`✅ ${indentRes.count} 箇所の過剰な重複インデント・連投空行をカットしました。`);
+            }
+          }
+
+          // 7. Comments removal
+          if (optRemoveComments.checked) {
+            const commentCount = (code.match(/<!--[\s\S]*?-->/g) || []).length;
+            code = code.replace(/<!--(?!\[if)[\s\S]*?-->/g, '');
+            if (commentCount > 0) {
+              logs.push(`✅ ${commentCount} 個のHTMLコメントを削除しました。`);
+            }
+          }
+
+          // 8. Minification
+          if (optMinify.checked) {
+            code = code.replace(/\s+/g, ' ').replace(/>\s+</g, '><').trim();
+            logs.push(`✅ HTMLを完全圧縮 (Minify) しました。`);
+          }
+
+          // Safeguard check
+          if (!optMinify.checked && code.length < origCharLen * 0.6) {
+            logs.unshift(`⚠️ 【注意】文末または特定の文字数が大幅に減少しています。入力データの未閉じタグが原因の可能性があるため、元のHTMLコードの文末をご確認ください。`);
+          }
+
+          // Render Output
+          outputHtml.value = code;
+          const optSize = new Blob([code]).size;
+          
+          statOriginal.textContent = formatBytes(origSize);
+          statOptimized.textContent = formatBytes(optSize);
+          
+          const savedPercent = origSize > 0 ? (((origSize - optSize) / origSize) * 100).toFixed(1) : '0';
+          statSaved.textContent = `${savedPercent}%`;
+
+          if (logs.length === 0) {
+            logs.push('ℹ️ 特に追加の最適化処理箇所はありませんでした。');
+          }
+
+          logList.innerHTML = logs.map(l => `<li>${l}</li>`).join('');
+
+        } catch (err) {
+          console.error(err);
+          showStatusMessage('⚠️ 処理中にエラーが発生しました: ' + err.message);
+        } finally {
+          btnProcess.disabled = false;
+          btnProcess.classList.remove('opacity-75', 'cursor-not-allowed');
+          btnProcess.innerHTML = origBtnContent;
+        }
+      }, 20);
+    });
+
+    function sanitizeTrailingUnclosedTags(rawHtml) {
+      let fixedComments = 0;
+      let html = rawHtml;
+
+      const openCommentCount = (html.match(/<!--/g) || []).length;
+      const closeCommentCount = (html.match(/-->/g) || []).length;
+
+      if (openCommentCount > closeCommentCount) {
+        fixedComments = openCommentCount - closeCommentCount;
+        for (let i = 0; i < fixedComments; i++) {
+          html += '-->';
+        }
+      }
+
+      return { html, fixedComments };
+    }
+
+    function analyzeTagStructure(rawHtml) {
+      const trackMap = {
+        div: { open: 0, close: 0, name: '<div> (レイアウトブロック)' },
+        span: { open: 0, close: 0, name: '<span> (インライン装飾)' },
+        table: { open: 0, close: 0, name: '<table> (表の全体枠)' },
+        tr: { open: 0, close: 0, name: '<tr> (表の行)' },
+        td: { open: 0, close: 0, name: '<td> (表のセル)' },
+        tbody: { open: 0, close: 0, name: '<tbody> (表の本文領域)' },
+        p: { open: 0, close: 0, name: '<p> (段落)' },
+        a: { open: 0, close: 0, name: '<a> (リンク)' }
+      };
+
+      // Ultra-fast single pass regex scanner
+      const tagRegex = /<(\/?)([a-zA-Z0-9]+)(?:\s+[^>]*|\s*)>/g;
+      let match;
+      while ((match = tagRegex.exec(rawHtml)) !== null) {
+        const isClose = match[1] === '/';
+        const tagName = match[2].toLowerCase();
+        if (trackMap[tagName]) {
+          if (isClose) {
+            trackMap[tagName].close++;
+          } else {
+            trackMap[tagName].open++;
+          }
+        }
+      }
+
+      const report = [];
+      let totalDiscrepancies = 0;
+
+      const aiNoiseMatches = rawHtml.match(/TgQPHd|\|\|\|/g);
+      const aiNoiseCount = aiNoiseMatches ? aiNoiseMatches.length : 0;
+
+      const brokenCloserMatches = rawHtml.match(/<!--[\s\S]*?--\s+>/g);
+      const brokenCloserCount = brokenCloserMatches ? brokenCloserMatches.length : 0;
+
+      for (const t in trackMap) {
+        const item = trackMap[t];
+        const diff = item.open - item.close;
+        if (item.open > 0 || item.close > 0) {
+          if (diff !== 0) totalDiscrepancies += Math.abs(diff);
+          report.push({
+            tag: item.name,
+            tagName: t,
+            openCount: item.open,
+            closeCount: item.close,
+            diff,
+            isBalanced: diff === 0
+          });
+        }
+      }
+
+      return { report, totalDiscrepancies, aiNoiseCount, brokenCloserCount };
+    }
+
+    function renderDiagnostics(diagData) {
+      const { report, totalDiscrepancies, aiNoiseCount, brokenCloserCount } = diagData;
+
+      if (totalDiscrepancies === 0 && aiNoiseCount === 0 && brokenCloserCount === 0) {
+        diagBadge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-emerald-950 text-emerald-400 border border-emerald-700 font-semibold';
+        diagBadge.textContent = '構造正常 (タグ欠損・ゴミタグなし)';
+      } else {
+        diagBadge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-rose-950 text-rose-300 border border-rose-700 font-semibold animate-pulse';
+        diagBadge.textContent = `⚠️ 要修復 (${totalDiscrepancies + aiNoiseCount + brokenCloserCount}箇所の問題)`;
+      }
+
+      if (report.length === 0) {
+        diagContainer.innerHTML = '<p class="text-slate-400">有効なHTMLタグが検出されませんでした。</p>';
+        return;
+      }
+
+      let html = '<table class="w-full text-left font-mono text-xs border-collapse">';
+      html += '<tr class="border-b border-slate-800 text-slate-400"><th class="py-1">対象タグ</th><th class="py-1 text-center">開始 (&lt;&gt;)</th><th class="py-1 text-center">終了 (&lt;/&gt;)</th><th class="py-1 text-right">診断状態</th></tr>';
+
+      report.forEach(row => {
+        let statusBadge = '';
+        if (row.isBalanced) {
+          statusBadge = '<span class="text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/50">一致 (OK)</span>';
+        } else if (row.diff > 0) {
+          statusBadge = `<span class="text-rose-400 font-bold bg-rose-950/60 px-2 py-0.5 rounded border border-rose-800/50">閉じタグ &lt;/${row.tagName}&gt; が ${row.diff}個 不足!</span>`;
+        } else {
+          statusBadge = `<span class="text-amber-400 font-bold bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/50">余分な閉じタグ &lt;/${row.tagName}&gt; が ${Math.abs(row.diff)}個 あり</span>`;
+        }
+
+        const rowBg = !row.isBalanced ? 'bg-rose-950/20' : '';
+
+        html += `<tr class="border-b border-slate-800/50 ${rowBg}">
+          <td class="py-1.5 font-sans font-medium">${row.tag}</td>
+          <td class="py-1.5 text-center text-slate-300">${row.openCount} 個</td>
+          <td class="py-1.5 text-center text-slate-300">${row.closeCount} 個</td>
+          <td class="py-1.5 text-right">${statusBadge}</td>
+        </tr>`;
+      });
+
+      html += '</table>';
+
+      if (totalDiscrepancies > 0 || aiNoiseCount > 0 || brokenCloserCount > 0) {
+        let warningText = '';
+        if (aiNoiseCount > 0 || brokenCloserCount > 0) {
+          warningText += `<strong>🚨 AI生成ゴミタグ・不完全なコメントタグを検出:</strong><br/><code>&lt;!--TgQPHd...--&gt;</code> や <code>-- &gt;</code> (スペース入りの破損閉じ記号) が検出されました。これが原因でブラウザが直後のHTML構造や文章を呑み込み、レイアウトが崩れて英文コードのように表示されていました。自動全削除・修復を行いました。<br/>`;
+        }
+        if (totalDiscrepancies > 0) {
+          warningText += `<strong>💡 表示崩れ・文末切断の原因検出:</strong><br/>開きタグに対して閉じタグが不足しているため「自動再構築」および「文末切断保護」が自動修正を行いました。`;
+        }
+        html += `<div class="mt-3 p-2 bg-rose-900/30 border border-rose-800 rounded text-rose-200 text-xs">${warningText}</div>`;
+      }
+
+      diagContainer.innerHTML = html;
+    }
+
+    function cleanAiNoiseComments(rawHtml) {
+      let count = 0;
+      let fixedBrokenClosers = 0;
+
+      // 1. Fix broken comment closers like "-- >" or "--  >" into "-->"
+      let html = rawHtml.replace(/<!--[\s\S]*?--\s+>/g, (match) => {
+        if (/--\s+>/.test(match)) {
+          fixedBrokenClosers++;
+        }
+        return match.replace(/--\s+>/g, '-->');
+      });
+
+      // 2. Remove AI noise comments containing TgQPHd, |||, [], or pure noise strings
+      html = html.replace(/<!--[\s\S]*?-->/g, (match) => {
+        if (/TgQPHd|\|\|\||\[\]/.test(match)) {
+          count++;
+          return '';
+        }
+        return match;
+      });
+
+      // 3. Remove orphaned plain text TgQPHd markers if outside comments
+      html = html.replace(/TgQPHd\|\|\|\[\]/g, () => {
+        count++;
+        return '';
+      });
+
+      return { html, count, fixedBrokenClosers };
+    }
+
+    function autoRepairTableStructure(rawHtml) {
+      let fixedCount = 0;
+      let html = rawHtml;
+
+      // 1. String-level pre-fix: Close unclosed <table> tags right after the last valid </td> or </tr>
+      const openMatches = html.match(/<table(?:\s+[^>]*)?>/gi) || [];
+      const closeMatches = html.match(/<\/table\s*>/gi) || [];
+
+      if (openMatches.length > closeMatches.length) {
+        const diff = openMatches.length - closeMatches.length;
+        const lastCellIdx = Math.max(
+          html.lastIndexOf('</td>'),
+          html.lastIndexOf('</TD>'),
+          html.lastIndexOf('</tr>'),
+          html.lastIndexOf('</TR>'),
+          html.lastIndexOf('</tbody>'),
+          html.lastIndexOf('</TBODY>')
+        );
+
+        if (lastCellIdx !== -1) {
+          const insertPos = html.indexOf('>', lastCellIdx) + 1;
+          if (insertPos > 0) {
+            html = html.slice(0, insertPos) + '\n</table>\n' + html.slice(insertPos);
+            fixedCount += diff;
+          }
+        } else {
+          html += '\n</table>';
+          fixedCount += diff;
+        }
+      }
+
+      // 2. DOM-level verification & strict sequential ejection using DocumentFragment
+      const parser = new DOMParser();
+      const wrapped = `<!DOCTYPE html><html><body><div id="repair-root">${html}</div></body></html>`;
+      const doc = parser.parseFromString(wrapped, 'text/html');
+      const root = doc.getElementById('repair-root');
+
+      if (!root) return { html, fixedCount };
+
+      const tables = root.querySelectorAll('table');
+      tables.forEach(table => {
+        const rows = table.querySelectorAll('tr');
+        if (rows.length > 0) {
+          const lastRow = rows[rows.length - 1];
+          const cells = lastRow.querySelectorAll('td, th');
+          if (cells.length > 0) {
+            const lastCell = cells[cells.length - 1];
+            
+            const nodesToEject = [];
+            let foundEjectStart = false;
+
+            Array.from(lastCell.childNodes).forEach(node => {
+              if (node.nodeType === 1) { // Element node
+                const tag = node.tagName.toLowerCase();
+                if (['h1','h2','h3','h4','h5','h6','ul','ol','p','div','hr','table','section','article'].includes(tag)) {
+                  foundEjectStart = true;
+                }
+              } else if (node.nodeType === 3) { // Text node
+                const txt = node.textContent.trim();
+                if (/^(?:---|===|\d{4}[-\/]\d{1,2}|202[0-9])/m.test(txt)) {
+                  foundEjectStart = true;
+                }
+              }
+
+              if (foundEjectStart) {
+                nodesToEject.push(node);
+              }
+            });
+
+            if (nodesToEject.length > 0) {
+              fixedCount += nodesToEject.length;
+              const fragment = doc.createDocumentFragment();
+              nodesToEject.forEach(n => fragment.appendChild(n));
+              
+              if (table.nextSibling) {
+                table.parentNode.insertBefore(fragment, table.nextSibling);
+              } else {
+                table.parentNode.appendChild(fragment);
+              }
+            }
+          }
+        }
+      });
+
+      return {
+        html: root.innerHTML,
+        fixedCount
+      };
+    }
+
+    const VALID_HTML_TAGS = new Set([
+      'a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 
+      'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 
+      'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed', 
+      'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 
+      'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 
+      'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'meta', 'meter', 'nav', 
+      'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'picture', 'pre', 
+      'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'section', 'select', 'slot', 
+      'small', 'source', 'span', 'strong', 'style', 'sub', 'summary', 'sup', 'svg', 'table', 
+      'tbody', 'td', 'template', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 
+      'track', 'u', 'ul', 'var', 'video', 'wbr'
+    ]);
+
+    function escapeLooseAngleBrackets(text) {
+      let count = 0;
+      const cleaned = text.replace(/<(\/?)([a-zA-Z0-9_:-]+)?/g, (match, isSlash, tagName) => {
+        if (!tagName) {
+          if (match.startsWith('<!--') || match.startsWith('<!DOCTYPE') || match.startsWith('<?')) {
+            return match;
+          }
+          count++;
+          return '&lt;' + (isSlash || '');
+        }
+        const lower = tagName.toLowerCase();
+        if (VALID_HTML_TAGS.has(lower) || match.startsWith('<!--') || match.startsWith('<!')) {
+          return match;
+        }
+        count++;
+        return '&lt;' + isSlash + tagName;
+      });
+      return { html: cleaned, count };
+    }
+
+    function cleanHTMLWithDOMParser(htmlStr, options) {
+      let cleanCount = 0;
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(htmlStr, 'text/html');
+
+      // 1. Remove empty divs, spans, or paragraphs safely in a single bottom-up pass
+      if (options.removeEmptyDivs) {
+        // Reverse order processes leaf nodes first, eliminating N^2 DOM queries
+        const candidates = Array.from(doc.body.querySelectorAll('div, span, p')).reverse();
+        candidates.forEach(el => {
+          if (!el.parentNode) return;
+          const hasMedia = el.querySelector('img, iframe, video, audio, input, table, canvas, svg');
+          const hasText = el.textContent.replace(/\s+/g, '').length > 0;
+          if (!hasMedia && !hasText) {
+            el.remove();
+            cleanCount++;
+          }
+        });
+      }
+
+      // 2. Clean useless attributes or spans with no attribute
+      if (options.cleanStyles) {
+        const spans = Array.from(doc.body.querySelectorAll('span'));
+        spans.forEach(span => {
+          if (span.attributes.length === 0) {
+            while (span.firstChild) {
+              span.parentNode.insertBefore(span.firstChild, span);
+            }
+            span.remove();
+            cleanCount++;
+          }
+        });
+
+        const allNodes = doc.body.querySelectorAll('*');
+        allNodes.forEach(node => {
+          ['style', 'class', 'id', 'dir', 'title'].forEach(attr => {
+            if (node.hasAttribute(attr)) {
+              const val = node.getAttribute(attr).trim();
+              if (!val || val === ';' || val === 'undefined') {
+                node.removeAttribute(attr);
+                cleanCount++;
+              }
+            }
+          });
+        });
+      }
+
+      // 3. Clean Blogger specific image container clutter
+      if (options.cleanBloggerImages) {
+        const separators = doc.body.querySelectorAll('div.separator');
+        separators.forEach(sep => {
+          let prev = sep.previousSibling;
+          while (prev && (prev.nodeName === 'BR' || (prev.nodeType === 3 && !prev.textContent.trim()))) {
+            const toRemove = prev;
+            prev = prev.previousSibling;
+            toRemove.remove();
+            cleanCount++;
+          }
+        });
+      }
+
+      return {
+        html: doc.body.innerHTML,
+        count: cleanCount
+      };
+    }
+
+    function decodeHTMLEntities(text) {
+      const textarea = document.createElement('textarea');
+      return text.replace(/&#?(?:[a-zA-Z0-9]+|x[0-9a-fA-F]+);/g, (match) => {
+        if (match === '&lt;' || match === '&gt;' || match === '&amp;' || match === '&quot;') {
+          return match;
+        }
+        textarea.innerHTML = match;
+        return textarea.value;
+      });
+    }
+
+    function decodePercentEncoding(text) {
+      return text.replace(/(?:%[0-9a-fA-F]{2}(?:[\s\r\n]|<br\s*\/?>)*)+/gi, (match) => {
+        const cleanMatch = match.replace(/[\s\r\n]|<br\s*\/?>/gi, '');
+        try {
+          return decodeURIComponent(cleanMatch);
+        } catch (err) {
+          return match;
+        }
+      });
+    }
+
+    function cleanIndentation(html) {
+      let count = 0;
+      let cleaned = html.replace(/[ \t]+$/gm, '');
+      cleaned = cleaned.replace(/^[ \t]{8,}/gm, () => {
+        count++;
+        return '    ';
+      });
+      cleaned = cleaned.replace(/(\r?\n){3,}/g, () => {
+        count++;
+        return '\n\n';
+      });
+      return { html: cleaned, count };
+    }
+
+    function formatBytes(bytes) {
+      if (bytes === 0) return '0 Bytes';
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    function showStatusMessage(msg) {
+      logList.innerHTML = `<li class="text-amber-400 font-semibold">${msg}</li>`;
+    }
+
+    // Reset
+    btnClear.addEventListener('click', () => {
+      inputHtml.value = '';
+      outputHtml.value = '';
+      inputStats.textContent = '0 バイト';
+      statOriginal.textContent = '0 KB';
+      statOptimized.textContent = '0 KB';
+      statSaved.textContent = '0%';
+      diagBadge.className = 'text-xs px-2.5 py-0.5 rounded-full bg-slate-700 text-slate-300';
+      diagBadge.textContent = '未診断';
+      diagContainer.innerHTML = '<p class="text-slate-500 italic">「診断 & 構造修復・クリーン実行」を押すと、div, span, table, td 等の開き/閉じタグの不整合がここに判定表示されます。</p>';
+      logList.innerHTML = '<li>コードを入力して「診断 & 構造修復・クリーン実行」を押してください。</li>';
+    });
+
+    // Download File
+    btnDownload.addEventListener('click', () => {
+      const content = outputHtml.value;
+      if (!content) {
+        showStatusMessage('保存するHTMLコードがありません。');
+        return;
+      }
+      const blob = new Blob([content], { type: 'text/html;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'fixed_blogger_template.html';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      btnDownload.innerHTML = `<i class="fa-solid fa-check text-slate-950"></i> 保存完了`;
+      setTimeout(() => {
+        btnDownload.innerHTML = `<i class="fa-solid fa-download"></i> ファイル保存 (.html)`;
+      }, 2000);
+    });
+
+    // Copy to Clipboard (iFrame Safe)
+    btnCopy.addEventListener('click', () => {
+      if (!outputHtml.value) return;
+
+      outputHtml.select();
+      outputHtml.setSelectionRange(0, 999999);
+
+      let copySuccess = false;
+      try {
+        copySuccess = document.execCommand('copy');
+      } catch (e) {
+        copySuccess = false;
+      }
+
+      if (copySuccess) {
+        showCopySuccess();
+      } else if (navigator.clipboard) {
+        navigator.clipboard.writeText(outputHtml.value).then(() => {
+          showCopySuccess();
+        }).catch(() => {
+          showStatusMessage('「ファイル保存」ボタンをご利用ください。');
+        });
+      } else {
+        showStatusMessage('「ファイル保存」ボタンをご利用ください。');
+      }
+    });
+
+    function showCopySuccess() {
+      btnCopy.innerHTML = `<i class="fa-solid fa-check text-emerald-400"></i> コピー完了!`;
+      setTimeout(() => {
+        btnCopy.innerHTML = `<i class="fa-regular fa-copy"></i> コピー`;
+      }, 2000);
+    }
+  </script>
+</body>
+</html>
