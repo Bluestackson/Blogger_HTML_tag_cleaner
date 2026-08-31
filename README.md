@@ -14,6 +14,7 @@ Script
   </iframe>
 </div>
 
+
 拡張Script
 <div style="width: 100%; border-radius: 8px; border: 1px solid #334155; background: #0f172a; overflow: hidden; font-family: sans-serif;">
   <!-- 別タブで大きく開くボタン -->
