@@ -3,7 +3,7 @@ Blogger_ぺージhtml内部のtagのエラー、重複を検出、ある程度�
 This script file detects and corrects errors and duplicate tags within the HTML of a Blogger page. After correcting the HTML with this script, further fine-tuning can be done with an HTML editor.
 
 direct_link:  https://bluestackson.github.io/Blogger_HTML_tag_cleaner/blogger_html_tester.html
-
+  
 Script
 <div style="width: 100%; overflow: hidden; border-radius: 8px; border: 1px solid #334155;">
   <iframe 
@@ -13,8 +13,8 @@ Script
     loading="lazy">
   </iframe>
 </div>
-
-
+  
+  
 拡張Script
 <div style="width: 100%; border-radius: 8px; border: 1px solid #334155; background: #0f172a; overflow: hidden; font-family: sans-serif;">
   <!-- 別タブで大きく開くボタン -->
