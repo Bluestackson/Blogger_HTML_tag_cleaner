@@ -13,3 +13,24 @@ Script
     loading="lazy">
   </iframe>
 </div>
+
+拡張Script
+<div style="width: 100%; border-radius: 8px; border: 1px solid #334155; background: #0f172a; overflow: hidden; font-family: sans-serif;">
+  <!-- 別タブで大きく開くボタン -->
+  <div style="padding: 8px 12px; background: #1e293b; text-align: right; border-bottom: 1px solid #334155;">
+    <a href="https://bluestackson.github.io/Blogger_HTML_tag_cleaner/blogger_html_cleaner.html" 
+       target="_blank" 
+       rel="noopener noreferrer" 
+       style="color: #38bdf8; font-size: 11px; text-decoration: none; font-weight: bold;">
+      ↗ 全画面でツールを開く
+    </a>
+  </div>
+  
+  <!-- ツール本体 iframe -->
+  <iframe 
+    src="https://bluestackson.github.io/Blogger_HTML_tag_cleaner/blogger_html_cleaner.html" 
+    style="width: 100%; height: 500px; border: none; display: block;" 
+    title="Blogger HTML クリーナー"
+    loading="lazy">
+  </iframe>
+</div>
