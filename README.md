@@ -1,20 +1,20 @@
 # Blogger_HTML_tag_cleaner
-;Blogger_ぺージhtml内部のtagのエラー、重複を検出、ある程度自動修正するスクリプトファイル。このスクリプトにてhtmlを修正した後、更にhtmlエディタでインデント状態などを微調整。Google Canvas 作成。
-;This script file detects and corrects errors and duplicate tags within the HTML of a Blogger page. After correcting the HTML with this script, further fine-tuning can be done with an HTML editor.
-;
+Blogger_ぺージhtml内部のtagのエラー,重複を検出、ある程度自動修正するスクリプトファイル。このスクリプトにてhtmlを修正した後,更にhtmlエディタでインデント状態などを微調整。Google Canvas 作成。
+This script file detects and corrects errors and duplicate tags within the HTML of a Blogger page. After correcting the HTML with this script, further fine-tuning can be done with an HTML editor.
+
 #背景
-;Blogger のページ生成機能にて、大量の<div>,<span>タグが挿入され、編集により閉じ忘れなどエラーが生じ、表示が崩れる場合の修正
-;2025～2026年代に急速に普及したAIチャット生成文を貼り付ける場合、やはり大量のhtmlタグやCSSが、編集により依存関係が破損したり閉じ忘れなどエラーが生じ、表示が崩れる場合の修正
+;Blogger のページ生成機能にて大量の<div>,<span>,タグが挿入され、編集により閉じ忘れなどエラーが生じ,表示が崩れる場合の修正
+;2025～2026年代に急速に普及したAIチャット生成文を貼り付ける場合,やはり大量のhtmlタグやCSSが,編集により依存関係が破損したり閉じ忘れなどエラーが生じ、表示が崩れる場合の修正
 ;ページのデータ量の圧縮
 ;
 #使い方
 ;Blogger編集画面の「html」画面から、ページのhtmlコード全体をコピーし、ツールのウィンドゥにペーストして実行。
 ;
 #既知の問題
-;まれにColorアトリビュートが消去、又は、無効となり、文字列が透明（色無し）になる部分が出る場合がある
-;CSSの状態によってはBlogger側の自動整形機能により、内容が部分的に削除されてしまう（「作成ビュー」リロードにて確認が必要）
+;まれにColorアトリビュートが消去,又は,無効となり,文字列が透明（色無し）になる部分が出る場合がある
+;CSSの状態によってはBlogger側の自動整形機能により,内容が部分的に削除されてしまう（「作成ビュー」リロードにて確認が必要）
 ;<div>,</div>タグなどが全角に変換されて残る場合がある。
-;コードの「コピー」ボタンの機能は、バッファ容量約1MBに制限(Windows11実行環境の場合)され、コード後半は無視される。1MBを越える場合は、「ダウンロード」機能を使用して下さい。
+;コードの「コピー」(copy)ボタンの機能は,バッファ容量約1MBに制限(Windows11実行環境の場合)され,コード後半は無視される。1MBを越える場合は,「ダウンロード」機能を使用して下さい。
 ;
 #direct_link:  https://bluestackson.github.io/Blogger_HTML_tag_cleaner/blogger_html_tester.html
 ; 
