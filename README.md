@@ -14,7 +14,7 @@ This script file detects and corrects errors and duplicate tags within the HTML 
 ;まれにColorアトリビュートが消去,又は,無効となり,文字列が透明（色無し）になる部分が出る場合がある
 ;CSSの状態によってはBlogger側の自動整形機能により,内容が部分的に削除されてしまう（「作成ビュー」リロードにて確認が必要）
 ;<div>,</div>タグなどが全角に変換されて残る場合がある。
-;コードの「コピー」(copy)ボタンの機能は,バッファ容量約1MBに制限(Windows11実行環境の場合)され,コード後半は無視される。1MBを越える場合は,「ダウンロード」機能を使用して下さい。
+;コードの「コピー」(copy)ボタンの機能は,バッファ容量約1MBに制限(Windows11実行環境の場合)され,コード後半は無視される。1MBを越える場合は,「ダウンロード」(download)機能を使用して下さい。
 ;
 #direct_link:  https://bluestackson.github.io/Blogger_HTML_tag_cleaner/blogger_html_tester.html
 ; 
